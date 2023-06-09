@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 fastrand = "2.0.0"
+indicatif = "0.17.5"
 serde_json = "1.0.96"
 shakmaty = "0.25.0"
