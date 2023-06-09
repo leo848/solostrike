@@ -1,3 +1,7 @@
+use std::convert::identity;
+use std::fs::OpenOptions;
+use std::iter;
+
 use shakmaty::{Chess, Position, Outcome, MoveList};
 use shakmaty::fen::Fen;
 
@@ -37,13 +41,15 @@ fn random_game() -> Option<Fen> {
 }
 
 fn main() {
-    for i in 0..1000 {
-        if i % 128 == 0 {
-            println!();
-        }
-        match random_game() {
-            Some(_) => print!("#"),
-            None => print!("."),
-        }
-    }
+    let file = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .open("fens.json")
+        .expect("failed to open file");
+    let output = iter::repeat_with(random_game)
+        .filter_map(identity)
+        .take(1_000)
+        .map(|fen| fen.to_string())
+        .collect::<Vec<String>>();
+    serde_json::to_writer_pretty(file, &output).expect("failed to serialize");
 }
