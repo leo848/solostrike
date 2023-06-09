@@ -25,7 +25,7 @@ fn random_game() -> Option<Fen> {
         );
     }
 
-    let Some(Outcome::Decisive { winner }) = game.outcome() else {
+    let Some(Outcome::Decisive { .. }) = game.outcome() else {
         return None;
     };
 
@@ -33,17 +33,17 @@ fn random_game() -> Option<Fen> {
         return None;
     }
 
-    println!("{winner} won");
-    println!();
-    println!("{:?}", prev.board());
-    println!();
-    println!("{:?}", game.board());
-
-    todo!()
+    Some(Fen::from_setup(prev.into_setup(shakmaty::EnPassantMode::Legal)))
 }
 
 fn main() {
-    for _ in 0..20 {
-        random_game();
+    for i in 0..1000 {
+        if i % 128 == 0 {
+            println!();
+        }
+        match random_game() {
+            Some(_) => print!("#"),
+            None => print!("."),
+        }
     }
 }
