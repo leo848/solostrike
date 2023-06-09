@@ -4,6 +4,7 @@ use shakmaty::EnPassantMode;
 use std::convert::identity;
 use std::fs::OpenOptions;
 use std::iter;
+use itertools::Itertools;
 
 use shakmaty::fen::Fen;
 use shakmaty::{Chess, MoveList, Outcome, Position};
@@ -80,8 +81,9 @@ fn main() {
 
     let output = iter::repeat_with(|| random_game(true))
         .filter_map(identity)
-        .take(AMOUNT)
         .map(|fen| fen.to_string())
+        .unique()
+        .take(AMOUNT)
         .enumerate()
         .inspect(|(i, _fen)| {
             if i % MOD == MOD - 1 {
