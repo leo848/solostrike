@@ -1,5 +1,6 @@
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
+use shakmaty::EnPassantMode;
 use std::convert::identity;
 use std::fs::OpenOptions;
 use std::iter;
@@ -7,13 +8,17 @@ use std::iter;
 use shakmaty::fen::Fen;
 use shakmaty::{Chess, MoveList, Outcome, Position};
 
-fn more_than_one_checkmate(chess: Chess, moves: &MoveList) -> bool {
+fn more_than_one_checkmate(chess: Chess, moves: &MoveList, only_mate: bool) -> bool {
     let mut game = chess.clone();
     moves
         .iter()
         .map(|move_| {
             game.play_unchecked(move_);
-            let game_over = game.is_game_over();
+            let game_over = if only_mate {
+                game.is_checkmate()
+            } else {
+                game.is_game_over()
+            };
             game = chess.clone();
             game_over
         })
@@ -22,7 +27,7 @@ fn more_than_one_checkmate(chess: Chess, moves: &MoveList) -> bool {
         .is_some()
 }
 
-fn random_game() -> Option<Fen> {
+fn random_game(immediate_mode: bool) -> Option<Fen> {
     let mut game = Chess::new();
     let mut prev = game.clone();
     let mut legal_moves = MoveList::new();
@@ -34,6 +39,13 @@ fn random_game() -> Option<Fen> {
         prev = game.clone();
         legal_moves = game.legal_moves();
         let random_idx = fastrand::usize(..legal_moves.len());
+
+        if immediate_mode {
+            if more_than_one_checkmate(game.clone(), &legal_moves, true) {
+                return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)))
+            }
+        }
+
         game.play_unchecked(&legal_moves[random_idx]);
     }
 
@@ -41,12 +53,12 @@ fn random_game() -> Option<Fen> {
         return None;
     };
 
-    if more_than_one_checkmate(prev.clone(), &legal_moves) {
+    if more_than_one_checkmate(prev.clone(), &legal_moves, false) {
         return None;
     }
 
     Some(Fen::from_setup(
-        prev.into_setup(shakmaty::EnPassantMode::Legal),
+        prev.into_setup(EnPassantMode::Legal),
     ))
 }
 
@@ -57,7 +69,7 @@ fn main() {
     let file = OpenOptions::new()
         .create(true)
         .write(true)
-        .open("fens.json")
+        .open("fens2.json")
         .expect("failed to open file");
     let bar = ProgressBar::new(AMOUNT as u64);
 
@@ -68,7 +80,7 @@ fn main() {
 
     bar.tick();
 
-    let output = iter::repeat_with(random_game)
+    let output = iter::repeat_with(|| random_game(true))
         .filter_map(identity)
         .take(AMOUNT)
         .map(|fen| fen.to_string())
