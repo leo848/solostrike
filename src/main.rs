@@ -24,8 +24,8 @@ fn more_than_one_checkmate(chess: Chess, moves: &MoveList, only_mate: bool) -> b
             game_over
         })
         .filter(|&b| b)
-        .nth(1)
-        .is_some()
+        .take(2)
+        .count() == 1
 }
 
 fn random_game(immediate_mode: bool) -> Option<Fen> {
@@ -68,7 +68,7 @@ fn main() {
     let file = OpenOptions::new()
         .create(true)
         .write(true)
-        .open("fens2.json")
+        .open("fens.json")
         .expect("failed to open file");
     let bar = ProgressBar::new(AMOUNT as u64);
 
@@ -79,7 +79,7 @@ fn main() {
 
     bar.tick();
 
-    let output = iter::repeat_with(|| random_game(true))
+    let output = iter::repeat_with(|| random_game(false))
         .filter_map(identity)
         .map(|fen| fen.to_string())
         .unique()
@@ -91,6 +91,7 @@ fn main() {
             }
         })
         .map(|(_, fen)| fen)
+        .sorted_by_key(|fen| fen.len())
         .collect::<Vec<String>>();
     bar.finish();
 
