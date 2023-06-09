@@ -31,7 +31,7 @@ fn random_game(immediate_mode: bool) -> Option<Fen> {
     let mut game = Chess::new();
     let mut prev = game.clone();
     let mut legal_moves = MoveList::new();
-    
+
     while !game.is_game_over() {
         if game.fullmoves().get() >= 100 {
             return None;
@@ -42,7 +42,7 @@ fn random_game(immediate_mode: bool) -> Option<Fen> {
 
         if immediate_mode {
             if more_than_one_checkmate(game.clone(), &legal_moves, true) {
-                return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)))
+                return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)));
             }
         }
 
@@ -57,9 +57,7 @@ fn random_game(immediate_mode: bool) -> Option<Fen> {
         return None;
     }
 
-    Some(Fen::from_setup(
-        prev.into_setup(EnPassantMode::Legal),
-    ))
+    Some(Fen::from_setup(prev.into_setup(EnPassantMode::Legal)))
 }
 
 const AMOUNT: usize = 100_000;
