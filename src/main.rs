@@ -1,8 +1,6 @@
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
 use itertools::Itertools;
-use shakmaty::Board;
-use shakmaty::Color;
 use shakmaty::EnPassantMode;
 use shakmaty::Role;
 use std::convert::identity;
@@ -77,6 +75,10 @@ fn random_game(config: GameConfig) -> Option<Fen> {
         return None;
     }
 
+    if config.only_material_losing && !material_winning(&game) {
+        return None;
+    }
+
     let Some(Outcome::Decisive { .. }) = game.outcome() else {
         return None;
     };
@@ -95,7 +97,7 @@ fn main() {
     let file = OpenOptions::new()
         .create(true)
         .write(true)
-        .open("fens.json")
+        .open("fens_losing.json")
         .expect("failed to open file");
     let bar = ProgressBar::new(AMOUNT as u64);
 
@@ -109,7 +111,7 @@ fn main() {
     let output = iter::repeat_with(|| {
         random_game(GameConfig {
             immediate_mode: true,
-            only_material_losing: false,
+            only_material_losing: true,
         })
     })
     .filter_map(identity)
