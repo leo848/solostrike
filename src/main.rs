@@ -75,7 +75,7 @@ fn random_game(config: GameConfig) -> Option<Fen> {
         return None;
     }
 
-    if config.only_material_losing && !material_winning(&game) {
+    if config.only_material_losing && material_winning(&game) {
         return None;
     }
 
