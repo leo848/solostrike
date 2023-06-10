@@ -9,7 +9,7 @@ use itertools::Itertools;
 use shakmaty::fen::Fen;
 use shakmaty::{Chess, MoveList, Outcome, Position};
 
-fn more_than_one_checkmate(chess: Chess, moves: &MoveList, only_mate: bool) -> bool {
+fn one_game_end(chess: Chess, moves: &MoveList, only_mate: bool) -> bool {
     let mut game = chess.clone();
     moves
         .iter()
@@ -42,7 +42,7 @@ fn random_game(immediate_mode: bool) -> Option<Fen> {
         let random_idx = fastrand::usize(..legal_moves.len());
 
         if immediate_mode {
-            if more_than_one_checkmate(game.clone(), &legal_moves, true) {
+            if one_game_end(game.clone(), &legal_moves, true) {
                 return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)));
             }
         }
@@ -54,7 +54,7 @@ fn random_game(immediate_mode: bool) -> Option<Fen> {
         return None;
     };
 
-    if more_than_one_checkmate(prev.clone(), &legal_moves, false) {
+    if one_game_end(prev.clone(), &legal_moves, false) {
         return None;
     }
 
@@ -68,7 +68,7 @@ fn main() {
     let file = OpenOptions::new()
         .create(true)
         .write(true)
-        .open("fens.json")
+        .open("fens2.json")
         .expect("failed to open file");
     let bar = ProgressBar::new(AMOUNT as u64);
 
@@ -79,7 +79,7 @@ fn main() {
 
     bar.tick();
 
-    let output = iter::repeat_with(|| random_game(false))
+    let output = iter::repeat_with(|| random_game(true))
         .filter_map(identity)
         .map(|fen| fen.to_string())
         .unique()
