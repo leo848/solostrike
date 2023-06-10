@@ -50,11 +50,15 @@ fn random_game(immediate_mode: bool) -> Option<Fen> {
         game.play_unchecked(&legal_moves[random_idx]);
     }
 
+    if immediate_mode {
+        return None;
+    }
+
     let Some(Outcome::Decisive { .. }) = game.outcome() else {
         return None;
     };
 
-    if one_game_end(prev.clone(), &legal_moves, false) {
+    if !one_game_end(prev.clone(), &legal_moves, false) {
         return None;
     }
 
