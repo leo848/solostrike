@@ -1,10 +1,10 @@
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
+use itertools::Itertools;
 use shakmaty::EnPassantMode;
 use std::convert::identity;
 use std::fs::OpenOptions;
 use std::iter;
-use itertools::Itertools;
 
 use shakmaty::fen::Fen;
 use shakmaty::{Chess, MoveList, Outcome, Position};
@@ -25,10 +25,16 @@ fn one_game_end(chess: Chess, moves: &MoveList, only_mate: bool) -> bool {
         })
         .filter(|&b| b)
         .take(2)
-        .count() == 1
+        .count()
+        == 1
 }
 
-fn random_game(immediate_mode: bool) -> Option<Fen> {
+struct GameConfig {
+    immediate_mode: bool,
+    only_material_losing: bool,
+}
+
+fn random_game(config: GameConfig) -> Option<Fen> {
     let mut game = Chess::new();
     let mut prev = game.clone();
     let mut legal_moves = MoveList::new();
@@ -41,7 +47,7 @@ fn random_game(immediate_mode: bool) -> Option<Fen> {
         legal_moves = game.legal_moves();
         let random_idx = fastrand::usize(..legal_moves.len());
 
-        if immediate_mode {
+        if config.immediate_mode {
             if one_game_end(game.clone(), &legal_moves, true) {
                 return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)));
             }
@@ -50,7 +56,7 @@ fn random_game(immediate_mode: bool) -> Option<Fen> {
         game.play_unchecked(&legal_moves[random_idx]);
     }
 
-    if immediate_mode {
+    if config.immediate_mode {
         return None;
     }
 
@@ -72,7 +78,7 @@ fn main() {
     let file = OpenOptions::new()
         .create(true)
         .write(true)
-        .open("fens2.json")
+        .open("fens.json")
         .expect("failed to open file");
     let bar = ProgressBar::new(AMOUNT as u64);
 
@@ -83,20 +89,25 @@ fn main() {
 
     bar.tick();
 
-    let output = iter::repeat_with(|| random_game(true))
-        .filter_map(identity)
-        .map(|fen| fen.to_string())
-        .unique()
-        .take(AMOUNT)
-        .enumerate()
-        .inspect(|(i, _fen)| {
-            if i % MOD == MOD - 1 {
-                bar.inc(MOD as u64);
-            }
+    let output = iter::repeat_with(|| {
+        random_game(GameConfig {
+            immediate_mode: true,
+            only_material_losing: false,
         })
-        .map(|(_, fen)| fen)
-        .sorted_by_key(|fen| fen.len())
-        .collect::<Vec<String>>();
+    })
+    .filter_map(identity)
+    .map(|fen| fen.to_string())
+    .unique()
+    .take(AMOUNT)
+    .enumerate()
+    .inspect(|(i, _fen)| {
+        if i % MOD == MOD - 1 {
+            bar.inc(MOD as u64);
+        }
+    })
+    .map(|(_, fen)| fen)
+    .sorted_by_key(|fen| fen.len())
+    .collect::<Vec<String>>();
     bar.finish();
 
     serde_json::to_writer_pretty(file, &output).expect("failed to serialize");
