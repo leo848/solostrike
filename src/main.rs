@@ -39,7 +39,7 @@ fn material_winning(chess: &Chess) -> bool {
         + (chess.their(Role::Knight) & chess.their(Role::Bishop)).count() * 3
         + chess.their(Role::Rook).count() * 5
         + chess.their(Role::Queen).count() * 9;
-    our_material >= their_material
+    our_material > their_material
 }
 
 struct GameConfig {
