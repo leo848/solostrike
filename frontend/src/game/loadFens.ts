@@ -3,6 +3,7 @@ let fens: null | string[] = null;
 export type FenInfo = {
   fen: string,
   index: number,
+  moveNumber: number,
 }
 
 export async function randomFen(): Promise<FenInfo> {
@@ -11,9 +12,12 @@ export async function randomFen(): Promise<FenInfo> {
   }
   assert(fens.length == 100000, `Length is not 100000, but ${fens.length}`);
   const index = Math.floor(Math.random() * fens.length);
+  const fen = fens[index];
+  const moveNumber = Number(fen.split(" ").slice(-1)[0]);
   return {
-    fen: fens[index],
+    fen,
     index,
+    moveNumber,
   };
 }
 
