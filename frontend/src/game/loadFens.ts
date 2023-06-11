@@ -4,7 +4,7 @@ export async function randomFen() {
   if (fens == null) {
     fens = await loadFens();
   }
-  assert(fens.length == 100_000, "Length is not 100_000");
+  assert(fens.length == 100000, `Length is not 100000, but ${fens.length}`);
   return fens[Math.floor(Math.random() * fens.length)];
 }
 
@@ -15,7 +15,7 @@ async function loadFens(): Promise<string[]> {
 }
 
 function assert(condition: boolean, message?: string): (typeof condition extends true ? never : undefined) {
-  if (condition) {
+  if (!condition) {
     throw new Error(message);
   } else {
     return undefined;
