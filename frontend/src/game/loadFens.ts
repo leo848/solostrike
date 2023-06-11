@@ -1,6 +1,6 @@
 let fens: null | string[] = null;
 
-export async function randomFen() {
+export async function randomFen(): Promise<string> {
   if (fens == null) {
     fens = await loadFens();
   }
