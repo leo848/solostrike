@@ -44,7 +44,7 @@ export default {
       },
       events: {
         move: (orig: Key, dest: Key, capturedPiece: ChessgroundPiece | undefined) => {
-          const move = { from: orig, to: dest };
+          const move = { from: orig, to: dest, promotion: 'q' };
           try {
             this.game.move(move);
           } catch (e) {
