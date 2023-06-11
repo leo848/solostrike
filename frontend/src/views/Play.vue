@@ -4,18 +4,24 @@
       <v-col cols="12" sm="9" md="8" lg="6">
         <div ref="chessground" id="chessground-main"></div>
       </v-col>
+      <v-col cols="12" md="4">
+        <GameState v-if="state && fenInfo" :state="state" :puzzle="fenInfo"></GameState>
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script lang="ts">
 import App from "../App.vue"
+import GameState from "../components/GameState.vue";
+
 import { Chessground } from 'chessground';
 import { Chess } from 'chess.js';
 import type { Api as ChessgroundApi } from 'chessground/api'
 import { Key, Piece as ChessgroundPiece } from "chessground/types";
 
 import { randomFen, FenInfo } from '@/game/loadFens';
+import { State, newState } from '@/game/state';
 
 function getDestinations(game: Chess): Map<Key, Key[]> {
   const destinations: Map<Key, Key[]> = new Map();
@@ -30,11 +36,12 @@ function getDestinations(game: Chess): Map<Key, Key[]> {
 }
 
 export default {
-  components: { App },
+  components: { App, GameState },
   data: () => ({
     game: null as null | Chess,
     ground: null as null | ChessgroundApi,
-    fenInfo: null as null | FenInfo
+    fenInfo: null as null | FenInfo,
+    state: newState(),
   }),
   mounted() {
     const config = {
@@ -51,6 +58,7 @@ export default {
             return;
           }
           if (this.game.isCheckmate()) {
+            this.state.correct++;
             this.ground.explode([dest]);
             setTimeout(() => {
               this.nextFen();
