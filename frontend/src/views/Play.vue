@@ -56,7 +56,7 @@ export default {
 
       this.ground.set({
         fen: this.currentFen,
-        orientation: this.game.turn(),
+        orientation: this.game.turn() == "w" ? "white" : "black",
       });
     }
   }
