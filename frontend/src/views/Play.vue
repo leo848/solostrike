@@ -11,13 +11,39 @@
 <script lang="ts">
 import App from "../App.vue"
 import { Chessground } from 'chessground';
+import { Chess } from 'chess.js';
+import type { Api as ChessgroundApi } from 'chessground/api'
+import { Key, Piece as ChessgroundPiece } from "chessground/types";
 
 export default {
   components: { App },
+  data: () => ({
+    game: null as null | Chess,
+    ground: null as null | ChessgroundApi,
+  }),
   mounted() {
-    const config = {};
-    const ground = Chessground(this.$refs.chessground, config);
-  }
+    const config = {
+      autoCastle: true,
+      movable: {
+        free: false,
+      },
+      events: {
+        move: (orig: Key, dest: Key, capturedPiece: ChessgroundPiece | undefined) => {
+          console.error("todo");
+        }
+      },
+      highlight: {
+        lastMove: true,
+        check: true,
+      },
+      animation: {
+        enabled: true,
+        duration: 500,
+      }
+    };
+
+    this.ground = Chessground(this.$refs.chessground, config);
+  },
 }
 </script>
 
