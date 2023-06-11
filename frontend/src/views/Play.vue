@@ -3,7 +3,6 @@
     <v-row>
       <v-col cols="12" sm="9" md="8" lg="6">
         <div ref="chessground" id="chessground-main"></div>
-        <v-btn size="x-large" @click="nextFen">next fen</v-btn>
       </v-col>
     </v-row>
   </div>
