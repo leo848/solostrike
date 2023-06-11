@@ -3,9 +3,9 @@
     <v-row>
       <v-col cols="12">
         <v-card max-width="400px" min-height="200px" class="ma-4">
-          <v-card-title class="text-h4">Neues Spiel</v-card-title>
+          <v-card-title class="text-h3 pa-8">Neues Spiel</v-card-title>
           <v-card-text>
-            <v-btn icon :size="80">
+            <v-btn block :size="80" class="rounded-pill">
               <v-icon :size="80">mdi-plus</v-icon>
             </v-btn>
           </v-card-text>
