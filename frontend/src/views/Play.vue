@@ -45,7 +45,30 @@ export default {
       },
       events: {
         move: (orig: Key, dest: Key, capturedPiece: ChessgroundPiece | undefined) => {
-          console.error("todo");
+          const move = { from: orig, to: dest };
+          try {
+            this.game.move(move);
+          } catch (e) {
+            return;
+          }
+          if (this.game.isCheckmate()) {
+            this.ground.explode([dest]);
+            setTimeout(() => {
+              this.nextFen();
+            }, 200);
+          } else if (this.game.isGameOver()) {
+            throw new Error("game over but no checkmate");
+          } else {
+            let moves = this.game.moves({ verbose: true });
+            let randomMove = moves[Math.floor(Math.random() * moves.length)];
+            this.game.move(randomMove);
+            this.ground.set({ fen: this.game.fen() })
+            setTimeout(() => {
+              this.game.load(this.fenInfo.fen);
+              this.ground.set({ fen: this.fenInfo.fen });
+              this.resetBoard();
+            }, 1500);
+          }
         }
       },
       highlight: {
@@ -69,6 +92,10 @@ export default {
       this.fenInfo = newFen;
       this.game.load(this.fenInfo.fen);
 
+      this.resetBoard();
+    },
+
+    resetBoard() {
       const destinations = getDestinations(this.game);
 
       this.ground.set({
@@ -79,6 +106,7 @@ export default {
           dests: destinations,
         }
       });
+
     }
   }
 }
