@@ -3,9 +3,14 @@
     <v-app-bar color="primary">
       <v-app-bar-title>{{ $route.meta.title }}</v-app-bar-title>
     </v-app-bar>
-    <router-view />
+    <v-main>
+      <router-view />
+    </v-main>
   </v-app>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+  export default {
+
+  }
 </script>

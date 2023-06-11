@@ -1,7 +1,11 @@
 <template>
-  <h2>Dashboard</h2>
+  <div>
+    something
+  </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
+  export default {
 
+  }
 </script>
