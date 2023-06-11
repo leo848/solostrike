@@ -21,6 +21,13 @@ const routes = [
       title: "Dashboard",
     }
   },
+  {
+    path: '/play',
+    component: () => import('@/views/Play.vue'),
+    meta: {
+      title: "Spielen",
+    }
+  }
 ]
 
 const router = createRouter({
