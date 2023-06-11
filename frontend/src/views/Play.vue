@@ -43,6 +43,7 @@ export default {
     };
 
     this.ground = Chessground(this.$refs.chessground, config);
+    this.game = new Chess();
   },
 }
 </script>
@@ -75,7 +76,9 @@ export default {
 
 #chessground-main {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  max-height: 80vh;
+  max-width: 80vh;
+  aspect-ratio: 1 / 1 !important;
   position: relative;
   overflow: hidden;
 }
