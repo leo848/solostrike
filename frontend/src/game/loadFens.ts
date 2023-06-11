@@ -1,11 +1,20 @@
 let fens: null | string[] = null;
 
-export async function randomFen(): Promise<string> {
+export type FenInfo = {
+  fen: string,
+  index: number,
+}
+
+export async function randomFen(): Promise<FenInfo> {
   if (fens == null) {
     fens = await loadFens();
   }
   assert(fens.length == 100000, `Length is not 100000, but ${fens.length}`);
-  return fens[Math.floor(Math.random() * fens.length)];
+  const index = Math.floor(Math.random() * fens.length);
+  return {
+    fen: fens[index],
+    index,
+  };
 }
 
 async function loadFens(): Promise<string[]> {
