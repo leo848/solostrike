@@ -21,7 +21,7 @@ import { randomFen } from '@/game/loadFens';
 function getDestinations(game: Chess): Map<Key, Key[]> {
   const destinations: Map<Key, Key[]> = new Map();
   for (const move of game.moves({ verbose: true })) {
-    if (typeof move === string) throw new Error("move is string");
+    if (typeof move === "string") throw new Error("move is string");
     if (destinations.get(move.from as Key) === undefined) {
       destinations.set(move.from as Key, []);
     }
