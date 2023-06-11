@@ -15,6 +15,9 @@ const routes = [
     //     component: () => import(/* webpackChunkName: "home" */ '@/views/Dashboard.vue'),
     //   },
     // ],
+    meta: {
+      title: "Dashboard",
+    }
   },
 ]
 
