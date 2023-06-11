@@ -48,10 +48,13 @@ export default {
 
     this.ground = Chessground(this.$refs.chessground, config);
     this.game = new Chess(this.currentFen);
+
+    this.nextFen();
   },
   methods: {
     async nextFen() {
-      this.currentFen = await randomFen();
+      let newFen = await randomFen();
+      this.currentFen = newFen.fen;
       this.game.load(this.currentFen);
 
       this.ground.set({
