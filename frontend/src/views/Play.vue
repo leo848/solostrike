@@ -3,6 +3,7 @@
     <v-row>
       <v-col cols="12" sm="9" md="8" lg="6">
         <div ref="chessground" id="chessground-main"></div>
+        <v-btn size="x-large" @click="nextFen">next fen</v-btn>
       </v-col>
     </v-row>
   </div>
@@ -15,11 +16,14 @@ import { Chess } from 'chess.js';
 import type { Api as ChessgroundApi } from 'chessground/api'
 import { Key, Piece as ChessgroundPiece } from "chessground/types";
 
+import { randomFen } from '@/game/loadFens';
+
 export default {
   components: { App },
   data: () => ({
     game: null as null | Chess,
     ground: null as null | ChessgroundApi,
+    currentFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
   }),
   mounted() {
     const config = {
@@ -43,8 +47,19 @@ export default {
     };
 
     this.ground = Chessground(this.$refs.chessground, config);
-    this.game = new Chess();
+    this.game = new Chess(this.currentFen);
   },
+  methods: {
+    async nextFen() {
+      this.currentFen = await randomFen();
+      this.game.load(this.currentFen);
+
+      this.ground.set({
+        fen: this.currentFen,
+        orientation: this.game.turn(),
+      });
+    }
+  }
 }
 </script>
 
