@@ -16,7 +16,7 @@ import { Chess } from 'chess.js';
 import type { Api as ChessgroundApi } from 'chessground/api'
 import { Key, Piece as ChessgroundPiece } from "chessground/types";
 
-import { randomFen } from '@/game/loadFens';
+import { randomFen, FenInfo } from '@/game/loadFens';
 
 function getDestinations(game: Chess): Map<Key, Key[]> {
   const destinations: Map<Key, Key[]> = new Map();
@@ -35,7 +35,7 @@ export default {
   data: () => ({
     game: null as null | Chess,
     ground: null as null | ChessgroundApi,
-    currentFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    fenInfo: null as null | FenInfo
   }),
   mounted() {
     const config = {
@@ -66,16 +66,17 @@ export default {
   methods: {
     async nextFen() {
       let newFen = await randomFen();
-      this.currentFen = newFen.fen;
-      this.game.load(this.currentFen);
+      this.fenInfo = newFen;
+      this.game.load(this.fenInfo.fen);
 
       const destinations = getDestinations(this.game);
 
       this.ground.set({
-        fen: this.currentFen,
+        fen: this.fenInfo.fen,
         orientation: this.game.turn() == "w" ? "white" : "black",
         movable: {
-          destinations,
+          free: false,
+          dests: destinations,
         }
       });
     }
