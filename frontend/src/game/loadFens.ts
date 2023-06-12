@@ -1,9 +1,12 @@
+import {Color} from "chessground/types";
+
 let fens: null | string[] = null;
 
 export type FenInfo = {
   fen: string,
   index: number,
   moveNumber: number,
+  color: Color,
 }
 
 export async function randomFen(): Promise<FenInfo> {
@@ -13,11 +16,14 @@ export async function randomFen(): Promise<FenInfo> {
   assert(fens.length == 100000, `Length is not 100000, but ${fens.length}`);
   const index = Math.floor(Math.random() * fens.length);
   const fen = fens[index];
-  const moveNumber = Number(fen.split(" ").slice(-1)[0]);
+  const components = fen.split(" ");
+  const moveNumber = Number(components[5]);
+  const colorToMove = components[1] == 'w' ? 'white' : 'black';
   return {
     fen,
     index,
     moveNumber,
+    color: colorToMove,
   };
 }
 
