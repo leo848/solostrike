@@ -9,6 +9,14 @@ export type FenInfo = {
   color: Color,
 }
 
+export function isFenInfo(obj: any): obj is FenInfo {
+  return obj
+  && obj.fen && typeof obj.fen == "string"
+  && typeof obj.index == "number"
+  && typeof obj.moveNumber == "number"
+  && obj.color == "white" || obj.color == "black";
+}
+
 export async function randomFen(): Promise<FenInfo> {
   if (fens == null) {
     fens = await loadFens();
