@@ -3,7 +3,7 @@
     <v-card-title class="large-number py-12 px-4">{{state.correct}}</v-card-title>
   </v-card>
   <v-card class="mt-8" :color="color" ref="puzzleCard">
-    <v-card-title>#{{puzzle.index}}</v-card-title>
+    <v-card-title>#{{puzzle.index}} • {{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
     <v-card-text class="semilarge py-8">{{puzzleMove}}</v-card-text>
   </v-card>
 </template>
