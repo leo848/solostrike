@@ -67,7 +67,13 @@ export default {
             throw new Error("game over but no checkmate");
           } else {
             let moves = this.game.moves({ verbose: true });
-            let randomMove = moves[Math.floor(Math.random() * moves.length)];
+            let capturedMoves = moves.filter(move => move.captured);
+            let randomMove;
+            if (capturedMoves.length) {
+              randomMove = capturedMoves[Math.floor(Math.random() * capturedMoves.length)];
+            } else {
+              randomMove = moves[Math.floor(Math.random() * moves.length)];
+            }
             this.game.move(randomMove);
             this.ground.set({ fen: this.game.fen() })
             setTimeout(() => {
