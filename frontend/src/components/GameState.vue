@@ -44,7 +44,9 @@ export default {
       setTimeout(() => {
         el.dispatchEvent(new Event("mouseup"));
         this.color = undefined;
-      }, 200)
+        this.state.temp.outcome = undefined;
+        this.state.temp.lastMove = undefined;
+      }, 750)
     }
   },
   watch: {
