@@ -30,7 +30,8 @@ export default {
   computed: {
     puzzleMove(): string {
       const suffix = this.puzzle.color === "white" ? ". " : "... ";
-      return `${this.puzzle.moveNumber}${suffix}`
+      const lastMove = this.state.temp?.lastMove?.san ?? '';
+      return `${this.puzzle.moveNumber}${suffix}${lastMove}`
     }
   }
 }

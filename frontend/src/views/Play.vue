@@ -51,14 +51,16 @@ export default {
       },
       events: {
         move: (orig: Key, dest: Key, capturedPiece: ChessgroundPiece | undefined) => {
-          const move = { from: orig, to: dest, promotion: 'q' };
+          const gameMoveInput = { from: orig, to: dest, promotion: 'q' };
+          let move;
           try {
-            this.game.move(move);
+            move = this.game.move(gameMoveInput);
           } catch (e) {
             return;
           }
           if (this.game.isCheckmate()) {
             this.state.correct++;
+            this.state.temp.lastMove = move;
             this.ground.explode([dest]);
             setTimeout(() => {
               this.nextFen();
@@ -101,6 +103,8 @@ export default {
   },
   methods: {
     async nextFen() {
+      this.state.temp = {};
+
       let newFen = await randomFen();
       this.fenInfo = newFen;
       this.game.load(this.fenInfo.fen);
