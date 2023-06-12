@@ -7,3 +7,8 @@ export function newState(): State {
     correct: 0,
   }
 }
+
+export function isState(obj: any): obj is State {
+  return obj
+  && typeof obj.correct == "number";
+}
