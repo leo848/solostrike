@@ -4,6 +4,7 @@ export type State = {
   correct: number,
   temp?: {
     lastMove?: { from: Square, to: Square, promotion ?: string, san: string },
+    outcome?: "right" | "wrong";
   }
 }
 

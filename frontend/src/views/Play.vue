@@ -55,12 +55,13 @@ export default {
           let move;
           try {
             move = this.game.move(gameMoveInput);
+            this.state.temp.lastMove = move;
           } catch (e) {
             return;
           }
           if (this.game.isCheckmate()) {
             this.state.correct++;
-            this.state.temp.lastMove = move;
+            this.state.temp.outcome = "right";
             this.ground.explode([dest]);
             setTimeout(() => {
               this.nextFen();
@@ -68,6 +69,7 @@ export default {
           } else if (this.game.isGameOver()) {
             throw new Error("game over but no checkmate");
           } else {
+            this.state.temp.outcome = "wrong";
             let moves = this.game.moves({ verbose: true });
             let capturedMoves = moves.filter(move => move.captured);
             let randomMove;
