@@ -11,20 +11,26 @@ export type State = {
 
 export type Timer = Ref<{
   paused: boolean,
-  started: Date,
-  secondsLeft: number,
+  start: Date,
+  end: Date,
   update: number,
 }>;
 
 export function isTimer(obj: any): obj is Timer {
-  return obj && typeof obj.secondsLeft === "number";
+  return obj && typeof obj.paused === "boolean"
+  && typeof obj.start === "object"
+  && typeof obj.end === "object"
+  && typeof obj.update === "number";
 }
 
 export function newTimer(): Timer {
+  const now = new Date();
+  const inOneMinute = new Date(now);
+  inOneMinute.setSeconds(now.getSeconds() + 60);
   let timer = reactive({
     paused: true,
-    started: new Date(),
-    secondsLeft: 60,
+    start: now,
+    end: inOneMinute,
     update: 0,
   });
   timer.update = setTimeout(() => updateTimer(timer), 1000);
@@ -32,9 +38,6 @@ export function newTimer(): Timer {
 }
 
 function updateTimer(timer: Timer): void {
-  if (!timer.paused) {
-    timer.secondsLeft--;
-  }
   timer.update = setTimeout(() => updateTimer(timer), 1000);
 }
 
