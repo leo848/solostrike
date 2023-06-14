@@ -1,11 +1,17 @@
 <template>
-  <v-card class="mt-8">
-    <v-card-title class="large-number py-12 px-4">{{state.correct}}</v-card-title>
-  </v-card>
-  <v-card class="mt-8" :color="color" ref="puzzleCard">
-    <v-card-title>#{{puzzle.index}} • {{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
-    <v-card-text class="semilarge py-8">{{puzzleMove}}</v-card-text>
-  </v-card>
+  <v-row>
+    <v-col cols="5">
+      <v-card class="mt-8">
+        <v-card-title class="large-number py-12 px-4">{{state.correct}}</v-card-title>
+      </v-card>
+    </v-col>
+    <v-col cols="7">
+      <v-card class="mt-8" :color="color" ref="puzzleCard">
+        <v-card-title>#{{puzzle.index}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
+        <v-card-text class="semilarge py-8">{{puzzleMove}}</v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -68,9 +74,9 @@ export default {
 
 <style scoped>
 .large-number {
-  font-size: 75pt;
+  font-size: 70pt;
 }
 .semilarge {
-  font-size: 40pt;
+  font-size: 30pt;
 }
 </style>
