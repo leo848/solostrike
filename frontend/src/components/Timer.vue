@@ -41,7 +41,7 @@ export default {
       if (this.timer.paused || this.secondsLeft % 1 > 0.5) {
         this.$refs.colon.style.color = "#ccc";
       } else {
-        this.$refs.colon.style.color = "#333";
+        this.$refs.colon.style.color = "#999";
       }
     }, 100);
   },
