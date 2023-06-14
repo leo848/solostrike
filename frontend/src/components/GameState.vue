@@ -9,7 +9,16 @@
     </v-col>
     <v-col cols="7">
       <v-scale-transition hide-on-leave>
-        <v-card :key="puzzle.index" :color="color" ref="puzzleCard">
+        <v-card :key="puzzle.index" :color="color" :loading="!color" ref="puzzleCard">
+          <template v-slot:loader="{ isActive }">
+            <v-progress-linear
+              :active="isActive"
+              color="#333"
+              height="4"
+              v-model="puzzle.index"
+              max="100000"
+             ></v-progress-linear>
+          </template>
           <v-card-title>#{{puzzle.index}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
           <v-card-text class="semilarge py-8">{{puzzleMove}}</v-card-text>
         </v-card>
