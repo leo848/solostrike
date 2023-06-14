@@ -26,19 +26,22 @@ import { type Timer, isTimer } from '@/game/state';
 
 export default {
   data: () => ({
-    secondsLeft: null as null | number,
+    secondsLeft: 60,
+    updateSeconds: null as null | NodeJS.Timer,
   }),
   props: {
     timer: {
+      type: Object,
       required: true,
       validator: isTimer,
     }
   },
   mounted() {
     this.updateSeconds = setInterval(() => {
+      if (this.timer.paused) return;
       this.secondsLeft = (this.timer.end.getTime() - new Date().getTime()) / 1000;
       if (!this.$refs.colon) return;
-      if (this.timer.paused || this.secondsLeft % 1 > 0.5) {
+      if (this.secondsLeft % 1 > 0.5) {
         this.$refs.colon.style.color = "#ccc";
       } else {
         this.$refs.colon.style.color = "#999";
