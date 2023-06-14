@@ -114,10 +114,12 @@ export default {
     right() {
       this.state.correct++;
       this.state.temp.outcome = "right";
+      this.timer.deltas.push(+5)
       this.timer.end.setSeconds(this.timer.end.getSeconds() + 5);
     },
     wrong() {
       this.state.temp.outcome = "wrong";
+      this.timer.deltas.push(-15);
       this.timer.end.setSeconds(this.timer.end.getSeconds() - 15);
     },
     async nextFen() {

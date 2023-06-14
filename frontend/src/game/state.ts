@@ -1,5 +1,5 @@
 import {Square} from "chess.js";
-import { reactive } from "vue";
+import { reactive, Ref } from "vue";
 
 export type State = {
   correct: number,
@@ -13,14 +13,16 @@ export type Timer = Ref<{
   paused: boolean,
   start: Date,
   end: Date,
-  update: number,
+  update: NodeJS.Timeout,
+  deltas: number[],
 }>;
 
 export function isTimer(obj: any): obj is Timer {
   return obj && typeof obj.paused === "boolean"
   && typeof obj.start === "object"
   && typeof obj.end === "object"
-  && typeof obj.update === "number";
+  && typeof obj.update
+  && Array.isArray(obj.deltas);
 }
 
 export function newTimer(): Timer {
@@ -32,6 +34,7 @@ export function newTimer(): Timer {
     start: now,
     end: inOneMinute,
     update: 0,
+    deltas: [],
   });
   timer.update = setTimeout(() => updateTimer(timer), 1000);
   return timer;
