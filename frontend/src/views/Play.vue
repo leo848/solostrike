@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12" sm="9" md="8" lg="6">
+      <v-col cols="12" sm="8" lg="5">
         <div ref="chessground" id="chessground-main"></div>
       </v-col>
       <v-col cols="12" md="4">
