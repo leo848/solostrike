@@ -4,7 +4,7 @@
       <v-col cols="12" sm="8" md="6" lg="5">
         <div ref="chessground" id="chessground-main"></div>
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="6">
         <Timer v-if="timer" :timer="timer" class="mt-8"></Timer>
         <GameState v-if="state && fenInfo" :state="state" :puzzle="fenInfo" class="mt-4"></GameState>
       </v-col>
@@ -54,6 +54,8 @@ export default {
       },
       events: {
         move: (orig: Key, dest: Key, capturedPiece: ChessgroundPiece | undefined) => {
+          this.timer.paused = false;
+
           const gameMoveInput = { from: orig, to: dest, promotion: 'q' };
           let move;
           try {
@@ -105,6 +107,9 @@ export default {
     this.game = new Chess(this.currentFen);
 
     this.nextFen();
+  },
+  created() {
+    console.log(this.timer);
   },
   methods: {
     async nextFen() {

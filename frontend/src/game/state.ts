@@ -1,4 +1,5 @@
 import {Square} from "chess.js";
+import { reactive } from "vue";
 
 export type State = {
   correct: number,
@@ -8,24 +9,24 @@ export type State = {
   }
 }
 
-export type Timer = {
+export type Timer = Ref<{
   paused: boolean,
   started: Date,
   secondsLeft: number,
   update: number,
-}
+}>;
 
 export function isTimer(obj: any): obj is Timer {
   return obj && typeof obj.secondsLeft === "number";
 }
 
 export function newTimer(): Timer {
-  let timer = {
+  let timer = reactive({
     paused: true,
     started: new Date(),
     secondsLeft: 60,
     update: 0,
-  };
+  });
   timer.update = setTimeout(() => updateTimer(timer), 1000);
   return timer;
 }
@@ -34,7 +35,7 @@ function updateTimer(timer: Timer): void {
   if (!timer.paused) {
     timer.secondsLeft--;
   }
-  setTimeout(() => updateTimer(timer), 1000);
+  timer.update = setTimeout(() => updateTimer(timer), 1000);
 }
 
 export function newState(): State {
