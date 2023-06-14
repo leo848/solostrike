@@ -5,7 +5,7 @@
         <v-card max-width="400px" min-height="200px" class="ma-4">
           <v-card-title class="text-h3 pa-8">Neues Spiel</v-card-title>
           <v-card-text>
-            <v-btn block :size="80" class="rounded-pill" href="/play">
+            <v-btn block :size="80" class="rounded-pill" href="/solostrike/play">
               <v-icon :size="80">mdi-plus</v-icon>
             </v-btn>
           </v-card-text>

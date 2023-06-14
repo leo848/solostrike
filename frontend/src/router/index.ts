@@ -5,7 +5,7 @@ import Dashboard from '@/views/Dashboard.vue';
 
 const routes = [
   {
-    path: '/',
+    path: '/solostrike/',
     component: () => import('@/views/Dashboard.vue'),
     // children: [
     //   {
@@ -22,7 +22,7 @@ const routes = [
     }
   },
   {
-    path: '/play',
+    path: '/solostrike/play',
     component: () => import('@/views/Play.vue'),
     meta: {
       title: "Spielen",
