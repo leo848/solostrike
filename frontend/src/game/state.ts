@@ -8,6 +8,14 @@ export type State = {
   }
 }
 
+export type Timer = {
+  secondsLeft: number,
+}
+
+export function isTimer(obj: any): obj is Timer {
+  return obj && typeof obj.secondsLeft === "number";
+}
+
 export function newState(): State {
   return {
     correct: 0,
