@@ -26,7 +26,7 @@ export function isTimer(obj: any): obj is Timer {
 export function newTimer(): Timer {
   const now = new Date();
   const inOneMinute = new Date(now);
-  inOneMinute.setSeconds(now.getSeconds() + 60);
+  inOneMinute.setSeconds(now.getSeconds() + 61.5);
   let timer = reactive({
     paused: true,
     start: now,
@@ -38,6 +38,7 @@ export function newTimer(): Timer {
 }
 
 function updateTimer(timer: Timer): void {
+  if (timer.paused) timer.end.setSeconds(timer.end.getSeconds() + 1);
   timer.update = setTimeout(() => updateTimer(timer), 1000);
 }
 

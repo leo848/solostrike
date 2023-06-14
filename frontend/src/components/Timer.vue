@@ -1,9 +1,15 @@
 <template>
   <v-card>
     <v-card-title class="timer">
+      <v-scroll-y-transition hide-on-leave>
+        <span :key="minutes">
+          {{minutes}}
+        </span>
+      </v-scroll-y-transition>
+      <span class="mx-n12" ref="colon">
+        :
+      </span>
       <span :key="secondsLeft">
-        {{minutes}}
-      </span>:<span>
         {{seconds}}
       </span>
     </v-card-title>
@@ -23,10 +29,16 @@ export default {
       validator: isTimer,
     }
   },
-  created() {
+  mounted() {
     this.updateSeconds = setInterval(() => {
-      this.secondsLeft = Math.floor((this.timer.end.getTime() - new Date().getTime()) / 1000);
-    }, 500);
+      this.secondsLeft = (this.timer.end.getTime() - new Date().getTime()) / 1000;
+      if (!this.$refs.colon) return;
+      if (this.timer.paused || this.secondsLeft % 1 > 0.5) {
+        this.$refs.colon.style.color = "#ccc";
+      } else {
+        this.$refs.colon.style.color = "#333";
+      }
+    }, 100);
   },
   computed: {
     minutes() {
