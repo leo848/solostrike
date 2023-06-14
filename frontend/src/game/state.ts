@@ -27,6 +27,7 @@ export function newTimer(): Timer {
     update: 0,
   };
   timer.update = setTimeout(() => updateTimer(timer), 1000);
+  return timer;
 }
 
 function updateTimer(timer: Timer): void {
