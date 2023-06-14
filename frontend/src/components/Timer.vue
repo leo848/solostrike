@@ -12,6 +12,9 @@
       <span :key="secondsLeft">
         {{seconds}}
       </span>
+      <span class="tenths rounded-lg px-5 my-0" v-if="secondsLeft <= 10">
+        {{tenths}}
+      </span>
     </v-card-title>
     <v-card-title class="time-up" v-else>
       Zeit
@@ -59,6 +62,10 @@ export default {
         raw = "0" + raw;
       }
       return raw;
+    },
+    tenths() {
+      let raw = Math.floor((this.secondsLeft % 1) * 10).toString();
+      return raw;
     }
   }
 }
@@ -73,5 +80,11 @@ export default {
 .time-up {
   font-size: 80px;
   line-height: 80px;
+}
+.tenths {
+  font-size: 75px;
+  background-color: #666;
+  color: #333;
+  vertical-align: top;
 }
 </style>
