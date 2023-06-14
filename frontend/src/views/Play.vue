@@ -68,7 +68,7 @@ export default {
             this.ground.explode([dest]);
             setTimeout(() => {
               this.nextFen();
-            }, 200);
+            }, 500);
           } else if (this.game.isGameOver()) {
             throw new Error("game over but no checkmate");
           } else {
