@@ -19,7 +19,7 @@
               max="100000"
              ></v-progress-linear>
           </template>
-          <v-card-title>#{{puzzle.index}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
+          <v-card-title>#{{leftPad(puzzle.index, "0", 7)}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
           <v-card-text class="semilarge py-8">{{puzzleMove}}</v-card-text>
         </v-card>
       </v-scale-transition>
@@ -66,6 +66,12 @@ export default {
         this.state.temp.outcome = undefined;
         this.state.temp.lastMove = undefined;
       }, 750)
+    },
+    leftPad(str: string, prefix: string, length: number): string {
+      while (str.length < length) {
+        str = prefix + str;
+      }
+      return str;
     }
   },
   watch: {
