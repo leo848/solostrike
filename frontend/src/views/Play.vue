@@ -118,7 +118,7 @@ export default {
     },
     wrong() {
       this.state.temp.outcome = "wrong";
-      this.timer.end.setSeconds(this.timer.end.getSeconds() - 10);
+      this.timer.end.setSeconds(this.timer.end.getSeconds() - 15);
     },
     async nextFen() {
       this.state.temp = {};
