@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="timer">
+    <v-card-title class="timer" v-if="secondsLeft >= 0">
       <v-scroll-y-transition hide-on-leave>
         <span :key="minutes">
           {{minutes}}
@@ -12,6 +12,11 @@
       <span :key="secondsLeft">
         {{seconds}}
       </span>
+    </v-card-title>
+    <v-card-title class="time-up" v-else>
+      Zeit
+      <br/>
+      abgelaufen!
     </v-card-title>
   </v-card>
 </template>
@@ -60,7 +65,10 @@ export default {
 .timer {
   font-size: 175px;
   font-weight: 300;
-  padding-top: 96px !important;
-  padding-bottom: 96px !important;
+  line-height: 175px;
+}
+.time-up {
+  font-size: 80px;
+  line-height: 80px;
 }
 </style>
