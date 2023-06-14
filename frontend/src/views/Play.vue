@@ -65,8 +65,7 @@ export default {
             return;
           }
           if (this.game.isCheckmate()) {
-            this.state.correct++;
-            this.state.temp.outcome = "right";
+            this.right();
             this.ground.explode([dest]);
             setTimeout(() => {
               this.nextFen();
@@ -74,7 +73,7 @@ export default {
           } else if (this.game.isGameOver()) {
             throw new Error("game over but no checkmate");
           } else {
-            this.state.temp.outcome = "wrong";
+            this.wrong();
             let moves = this.game.moves({ verbose: true });
             let capturedMoves = moves.filter(move => move.captured);
             let randomMove;
@@ -112,6 +111,15 @@ export default {
     console.log(this.timer);
   },
   methods: {
+    right() {
+      this.state.correct++;
+      this.state.temp.outcome = "right";
+      this.timer.end.setSeconds(this.timer.end.getSeconds() + 5);
+    },
+    wrong() {
+      this.state.temp.outcome = "wrong";
+      this.timer.end.setSeconds(this.timer.end.getSeconds() - 10);
+    },
     async nextFen() {
       this.state.temp = {};
 
