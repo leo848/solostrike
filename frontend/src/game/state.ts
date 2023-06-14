@@ -9,11 +9,31 @@ export type State = {
 }
 
 export type Timer = {
+  paused: boolean,
+  started: Date,
   secondsLeft: number,
+  update: number,
 }
 
 export function isTimer(obj: any): obj is Timer {
   return obj && typeof obj.secondsLeft === "number";
+}
+
+export function newTimer(): Timer {
+  let timer = {
+    paused: true,
+    started: new Date(),
+    secondsLeft: 60,
+    update: 0,
+  };
+  timer.update = setTimeout(() => updateTimer(timer), 1000);
+}
+
+function updateTimer(timer: Timer): void {
+  if (!timer.paused) {
+    timer.secondsLeft--;
+  }
+  setTimeout(() => updateTimer(timer), 1000);
 }
 
 export function newState(): State {

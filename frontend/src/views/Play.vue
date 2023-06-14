@@ -5,7 +5,8 @@
         <div ref="chessground" id="chessground-main"></div>
       </v-col>
       <v-col cols="12" md="4">
-        <GameState v-if="state && fenInfo" :state="state" :puzzle="fenInfo"></GameState>
+        <Timer v-if="timer" :timer="timer" class="mt-8"></Timer>
+        <GameState v-if="state && fenInfo" :state="state" :puzzle="fenInfo" class="mt-4"></GameState>
       </v-col>
     </v-row>
   </div>
@@ -14,6 +15,7 @@
 <script lang="ts">
 import App from "../App.vue"
 import GameState from "../components/GameState.vue";
+import Timer from "../components/Timer.vue";
 
 import { Chessground } from 'chessground';
 import { Chess } from 'chess.js';
@@ -21,7 +23,7 @@ import type { Api as ChessgroundApi } from 'chessground/api'
 import { Key, Piece as ChessgroundPiece } from "chessground/types";
 
 import { randomFen, FenInfo } from '@/game/loadFens';
-import { State, newState } from '@/game/state';
+import { State, newState, type Timer as TimerType, newTimer } from '@/game/state';
 
 function getDestinations(game: Chess): Map<Key, Key[]> {
   const destinations: Map<Key, Key[]> = new Map();
@@ -36,12 +38,13 @@ function getDestinations(game: Chess): Map<Key, Key[]> {
 }
 
 export default {
-  components: { App, GameState },
+  components: { App, GameState, Timer },
   data: () => ({
     game: null as null | Chess,
     ground: null as null | ChessgroundApi,
     fenInfo: null as null | FenInfo,
     state: newState(),
+    timer: newTimer(),
   }),
   mounted() {
     const config = {

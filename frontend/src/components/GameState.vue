@@ -1,12 +1,12 @@
 <template>
   <v-row>
     <v-col cols="5">
-      <v-card class="mt-8">
+      <v-card>
         <v-card-title class="large-number py-12 px-4">{{state.correct}}</v-card-title>
       </v-card>
     </v-col>
     <v-col cols="7">
-      <v-card class="mt-8" :color="color" ref="puzzleCard">
+      <v-card :color="color" ref="puzzleCard">
         <v-card-title>#{{puzzle.index}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
         <v-card-text class="semilarge py-8">{{puzzleMove}}</v-card-text>
       </v-card>
