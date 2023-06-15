@@ -36,12 +36,15 @@ export function newTimer(): Timer {
     update: 0 as unknown as NodeJS.Timeout,
     deltas: [] as number[],
   }) as unknown as Timer;
+  // @ts-ignore
   timer.update = setTimeout(() => updateTimer(timer), 1000);
   return timer;
 }
 
 function updateTimer(timer: Timer): void {
+  // @ts-ignore
   if (timer.paused) timer.end.setSeconds(timer.end.getSeconds() + 1);
+  // @ts-ignore
   timer.update = setTimeout(() => updateTimer(timer), 1000);
 }
 

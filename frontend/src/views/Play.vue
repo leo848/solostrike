@@ -108,7 +108,7 @@ export default {
       throw new Error("No board element");
     }
     this.ground = Chessground(boardElt, config);
-    this.game = new Chess(this.fenInfo!.fen);
+    this.game = new Chess(this.fenInfo?.fen || undefined);
 
     this.nextFen();
   },
