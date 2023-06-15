@@ -112,9 +112,6 @@ export default {
 
     this.nextFen();
   },
-  created() {
-    console.log(this.timer);
-  },
   methods: {
     right() {
       this.state.correct++;
