@@ -71,11 +71,13 @@ export default {
         delta.shown--;
       }
 
-      if (!this.$refs.colon) return;
+      const colonElt = this.$refs.colon;
+      if (!colonElt) return;
+      if (!(colonElt instanceof HTMLElement)) return;
       if (this.secondsLeft % 1 > 0.5) {
-        this.$refs.colon.style.color = "#ccc";
+        colonElt.style.color = "#ccc";
       } else {
-        this.$refs.colon.style.color = "#999";
+        colonElt.style.color = "#999";
       }
     }, 100);
   },

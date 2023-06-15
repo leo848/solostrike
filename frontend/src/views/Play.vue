@@ -40,7 +40,7 @@ function getDestinations(game: Chess): Map<Key, Key[]> {
 export default {
   components: { App, GameState, Timer },
   data: () => ({
-    game: null as null | Chess,
+    game: new Chess() as Chess,
     ground: null as null | ChessgroundApi,
     fenInfo: null as null | FenInfo,
     state: newState(),
@@ -66,7 +66,7 @@ export default {
           }
           if (this.game.isCheckmate()) {
             this.right();
-            this.ground.explode([dest]);
+            this.ground!.explode([dest]);
             setTimeout(() => {
               this.nextFen();
             }, 500);
@@ -83,10 +83,11 @@ export default {
               randomMove = moves[Math.floor(Math.random() * moves.length)];
             }
             this.game.move(randomMove);
-            this.ground.set({ fen: this.game.fen() })
+            this.ground!.set({ fen: this.game.fen() })
             setTimeout(() => {
+              if (!this.fenInfo) throw new Error("no previous fen");
               this.game.load(this.fenInfo.fen);
-              this.ground.set({ fen: this.fenInfo.fen });
+              this.ground!.set({ fen: this.fenInfo.fen });
               this.resetBoard();
             }, 1500);
           }
@@ -102,8 +103,12 @@ export default {
       }
     };
 
-    this.ground = Chessground(this.$refs.chessground, config);
-    this.game = new Chess(this.currentFen);
+    const boardElt = this.$refs.chessground;
+    if (!(boardElt instanceof HTMLElement)) {
+      throw new Error("No board element");
+    }
+    this.ground = Chessground(boardElt, config);
+    this.game = new Chess(this.fenInfo!.fen);
 
     this.nextFen();
   },
@@ -127,15 +132,18 @@ export default {
 
       let newFen = await randomFen();
       this.fenInfo = newFen;
-      this.game.load(this.fenInfo.fen);
+      this.game.load(newFen.fen);
 
       this.resetBoard();
     },
 
     resetBoard() {
-      const destinations = getDestinations(this.game);
+      const { game, ground } = this;
+      if (!game || !ground) throw new Error("no game");
+      const destinations = getDestinations(game as Chess);
 
-      this.ground.set({
+      if (!this.fenInfo) throw new Error("no fen");
+      ground.set({
         fen: this.fenInfo.fen,
         orientation: this.game.turn() == "w" ? "white" : "black",
         movable: {

@@ -1,13 +1,13 @@
 <template>
   <v-row>
     <v-col cols="5">
-      <v-card>
+      <v-card v-if="state">
           <v-scroll-y-transition hide-on-leave>
             <v-card-title :key="state.correct" class="large-number py-12 px-4">{{state.correct}}</v-card-title>
           </v-scroll-y-transition>
         </v-card>
     </v-col>
-    <v-col cols="7">
+    <v-col cols="7" v-if="puzzle">
       <v-scale-transition hide-on-leave>
         <v-card :key="puzzle.index" :color="color" :loading="!color" ref="puzzleCard">
           <template v-slot:loader="{ isActive }">
@@ -19,7 +19,7 @@
               max="100000"
              ></v-progress-linear>
           </template>
-          <v-card-title>#{{leftPad(puzzle.index, "0", 7)}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
+          <v-card-title>#{{leftPad("" + puzzle.index, "0", 7)}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
           <v-card-text class="semilarge py-8">{{puzzleMove}}</v-card-text>
         </v-card>
       </v-scale-transition>
@@ -40,19 +40,23 @@ export default {
       required: true,
       validator: (obj: any): obj is State => {
         return isState(obj);
-      }
+      },
+      type: Object as () => State,
     },
     puzzle: {
       required: true,
       validator: (obj: any): obj is FenInfo => {
         return isFenInfo(obj);
-      }
+      },
+      type: Object as () => FenInfo,
     }
   },
   methods: {
     input(result: "right" | "wrong") {
       const ev = new Event("mousedown") as MouseEventInit;
-      const el = this.$refs.puzzleCard.$el;
+      const puzzleElt = this.$refs.puzzleCard as any;
+      if (!puzzleElt || !(puzzleElt.$el)) throw new Error("no puzzle element");
+      const el = puzzleElt.$el;
       const offset = el.getBoundingClientRect();
       ev.clientX = offset.left + offset.width / 2;
       ev.clientY = offset.top + offset.height / 2;

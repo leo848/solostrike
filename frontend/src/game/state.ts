@@ -3,7 +3,7 @@ import { reactive, Ref } from "vue";
 
 export type State = {
   correct: number,
-  temp?: {
+  temp: {
     lastMove?: { from: Square, to: Square, promotion ?: string, san: string },
     outcome?: "right" | "wrong";
   }
@@ -33,16 +33,16 @@ export function newTimer(): Timer {
     paused: true,
     start: now,
     end: inOneMinute,
-    update: 0,
-    deltas: [],
-  });
-  timer.update = setTimeout(() => updateTimer(timer), 1000);
+    update: 0 as unknown as NodeJS.Timeout,
+    deltas: [] as number[],
+  }) as unknown as Timer;
+  timer.value.update = setTimeout(() => updateTimer(timer), 1000);
   return timer;
 }
 
 function updateTimer(timer: Timer): void {
-  if (timer.paused) timer.end.setSeconds(timer.end.getSeconds() + 1);
-  timer.update = setTimeout(() => updateTimer(timer), 1000);
+  if (timer.value.paused) timer.value.end.setSeconds(timer.value.end.getSeconds() + 1);
+  timer.value.update = setTimeout(() => updateTimer(timer), 1000);
 }
 
 export function newState(): State {
