@@ -1,9 +1,9 @@
 <template>
   <v-row>
     <v-col cols="5" v-if="state">
-      <v-card>
+      <v-card height="100%">
           <v-scroll-y-transition hide-on-leave>
-            <v-card-title :key="state.correct" class="large-number py-12 px-4">{{state.correct}}</v-card-title>
+            <v-card-title :key="state.correct" class="large-number text-center py-16 px-4">{{state.correct}}</v-card-title>
           </v-scroll-y-transition>
         </v-card>
     </v-col>
@@ -97,7 +97,7 @@ export default {
 
 <style scoped>
 .large-number {
-  font-size: 70pt;
+  font-size: 90pt;
 }
 .semilarge {
   font-size: 30pt;
