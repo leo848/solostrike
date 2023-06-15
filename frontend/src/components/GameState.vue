@@ -19,7 +19,7 @@
               max="100000"
              ></v-progress-linear>
           </template>
-          <v-card-title>#{{leftPad("" + puzzle.index, "0", 7)}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
+          <v-card-title>#{{leftPad("" + puzzle.index, "0", 5)}}<br/>{{puzzle.color === "white" ? "Weiß" : "Schwarz"}} am Zug</v-card-title>
           <v-card-text class="semilarge py-8">{{puzzleMove}}</v-card-text>
         </v-card>
       </v-scale-transition>
