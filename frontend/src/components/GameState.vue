@@ -1,7 +1,7 @@
 <template>
   <v-row>
-    <v-col cols="5">
-      <v-card v-if="state">
+    <v-col cols="5" v-if="state">
+      <v-card>
           <v-scroll-y-transition hide-on-leave>
             <v-card-title :key="state.correct" class="large-number py-12 px-4">{{state.correct}}</v-card-title>
           </v-scroll-y-transition>
