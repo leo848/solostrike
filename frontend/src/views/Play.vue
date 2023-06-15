@@ -119,8 +119,8 @@ export default {
     right() {
       this.state.correct++;
       this.state.temp.outcome = "right";
-      this.timer.deltas.push(+5)
-      this.timer.end.setSeconds(this.timer.end.getSeconds() + 5);
+      this.timer.deltas.push(+3)
+      this.timer.end.setSeconds(this.timer.end.getSeconds() + 3);
     },
     wrong() {
       this.state.temp.outcome = "wrong";
