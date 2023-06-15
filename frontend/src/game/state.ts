@@ -36,13 +36,13 @@ export function newTimer(): Timer {
     update: 0 as unknown as NodeJS.Timeout,
     deltas: [] as number[],
   }) as unknown as Timer;
-  timer.value.update = setTimeout(() => updateTimer(timer), 1000);
+  timer.update = setTimeout(() => updateTimer(timer), 1000);
   return timer;
 }
 
 function updateTimer(timer: Timer): void {
-  if (timer.value.paused) timer.value.end.setSeconds(timer.value.end.getSeconds() + 1);
-  timer.value.update = setTimeout(() => updateTimer(timer), 1000);
+  if (timer.paused) timer.end.setSeconds(timer.end.getSeconds() + 1);
+  timer.update = setTimeout(() => updateTimer(timer), 1000);
 }
 
 export function newState(): State {
