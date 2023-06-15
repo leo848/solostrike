@@ -55,11 +55,17 @@ export default {
       validator: isTimer,
     }
   },
+  emits: [ 'timeUp' ],
   mounted() {
     this.updateSeconds = setInterval(() => {
       if (this.timer.paused) return;
 
       this.secondsLeft = (this.timer.end.getTime() - new Date().getTime()) / 1000;
+      if (this.secondsLeft < 0) {
+        if (this.updateSeconds) clearInterval(this.updateSeconds);
+        this.$emit("timeUp");
+      }
+
       if (this.timer.deltas.length > 0) {
         this.deltas.push({
           amount: this.timer.deltas.pop(),
