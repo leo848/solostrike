@@ -18,6 +18,12 @@ export type GameResult = {
   attempts: number,
 }
 
+export function streak(state: State): number {
+  let counter = 0;
+  for (; state.gameResults[state.gameResults.length - counter - 1].attempts <= 1; counter++);
+  return counter;
+}
+
 export type Timer = Ref<{
   paused: boolean,
   start: Date,
