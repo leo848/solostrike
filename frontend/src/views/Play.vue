@@ -88,8 +88,8 @@ export default {
               if (!this.fenInfo) throw new Error("no previous fen");
               this.game.load(this.fenInfo.fen);
               this.ground!.set({ fen: this.fenInfo.fen });
-              // this.resetBoard();
-              this.nextFen();
+              this.resetBoard();
+              // this.nextFen();
             }, 1500);
           }
         }
