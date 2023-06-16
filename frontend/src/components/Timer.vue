@@ -20,7 +20,7 @@
         </v-col>
         <v-col cols="4">
           <span>
-            <v-card class="delta" v-for="delta, id in deltas" :key="delta.amount+id" :color="color(delta)" max-width="75px">
+            <v-card class="delta" v-for="delta, id in deltas" :key="delta.amount+id" :color="color(delta)" max-width="95px">
               <v-card-title class="pl-0">
                 <v-icon v-if="delta.amount > 0">mdi-plus</v-icon>
                 <v-icon v-else-if="delta.amount < 0">mdi-minus</v-icon>
