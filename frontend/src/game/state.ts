@@ -3,10 +3,17 @@ import { reactive, Ref } from "vue";
 
 export type State = {
   correct: number,
+  gameResults: GameResult[],
   temp: {
     lastMove?: { from: Square, to: Square, promotion ?: string, san: string },
     outcome?: "right" | "wrong";
   }
+}
+
+export type GameResult = {
+  fen: string,
+  timeDisplayed: Date,
+  solved: boolean,
 }
 
 export type Timer = Ref<{
@@ -51,6 +58,7 @@ function updateTimer(timer: Timer): void {
 export function newState(): State {
   return {
     correct: 0,
+    gameResults: [],
     temp: { },
   }
 }
