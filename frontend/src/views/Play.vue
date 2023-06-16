@@ -5,7 +5,7 @@
         <div ref="chessground" id="chessground-main"></div>
       </v-col>
       <v-col cols="12" md="6">
-        <Timer v-if="timer" :timer="timer" class="mt-8"></Timer>
+        <Timer @timeUp="timeUp" v-if="timer" :timer="timer" class="mt-8"></Timer>
         <GameState v-if="state && fenInfo" :state="state" :puzzle="fenInfo" class="mt-4"></GameState>
       </v-col>
     </v-row>
@@ -23,7 +23,7 @@ import type { Api as ChessgroundApi } from 'chessground/api'
 import { Key, Piece as ChessgroundPiece } from "chessground/types";
 
 import { randomFen, FenInfo } from '@/game/loadFens';
-import { State, newState, type Timer as TimerType, newTimer } from '@/game/state';
+import { type State, newState, type GameResult, type Timer as TimerType, newTimer } from '@/game/state';
 
 function getDestinations(game: Chess): Map<Key, Key[]> {
   const destinations: Map<Key, Key[]> = new Map();
@@ -114,14 +114,19 @@ export default {
     this.nextFen();
   },
   methods: {
+    lastGameResult(): GameResult {
+      return this.state.gameResults[this.state.gameResults.length - 1];
+    },
     right() {
       this.state.correct++;
-      this.state.gameResults[this.state.gameResults.length - 1].solved = true;
+      this.lastGameResult().attempts++;
+      this.lastGameResult().solved = true;
       this.state.temp.outcome = "right";
       this.timer.deltas.push(+3)
       this.timer.end.setSeconds(this.timer.end.getSeconds() + 3);
     },
     wrong() {
+      this.lastGameResult().attempts++;
       this.state.temp.outcome = "wrong";
       this.timer.deltas.push(-15);
       this.timer.end.setSeconds(this.timer.end.getSeconds() - 15);
@@ -134,6 +139,7 @@ export default {
         fen: newFen,
         timeDisplayed: new Date(),
         solved: false,
+        attempts: 0,
       })
       this.fenInfo = newFen;
       this.game.load(newFen.fen);
@@ -156,6 +162,10 @@ export default {
         }
       });
 
+    },
+
+    timeUp() {
+      console.log(this.state);
     }
   }
 }

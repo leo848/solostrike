@@ -15,6 +15,7 @@ export type GameResult = {
   fen: FenInfo,
   timeDisplayed: Date,
   solved: boolean,
+  attempts: number,
 }
 
 export type Timer = Ref<{
