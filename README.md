@@ -15,10 +15,11 @@ as possible.
 ```shell
 $ # Clone the repository
 $ git clone https://github.com/leo848/solostrike
+$ cd solostrike
 
 $ # Optional: generate your own FEN file
 $ # Visit the backend directory
-$ cd solostrike/matemovemasters
+$ cd matemovemasters
 $ # Generate a JSON file of chess positions (your own!)
 $ cargo run --release
 $ cd ..
