@@ -25,6 +25,7 @@
                 <v-icon v-if="delta.amount > 0">mdi-plus</v-icon>
                 <v-icon v-else-if="delta.amount < 0">mdi-minus</v-icon>
                 <span class="pl-0 text-h5">{{Math.abs(delta.amount)}}</span>
+                <span class="pl-0 text-h5">s</span>
               </v-card-title>
             </v-card>
           </span>
