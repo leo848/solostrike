@@ -116,6 +116,7 @@ export default {
   methods: {
     right() {
       this.state.correct++;
+      this.state.gameResults[this.state.gameResults.length - 1].solved = true;
       this.state.temp.outcome = "right";
       this.timer.deltas.push(+3)
       this.timer.end.setSeconds(this.timer.end.getSeconds() + 3);
@@ -129,6 +130,11 @@ export default {
       this.state.temp = {};
 
       let newFen = await randomFen();
+      this.state.gameResults.push({
+        fen: newFen,
+        timeDisplayed: new Date(),
+        solved: false,
+      })
       this.fenInfo = newFen;
       this.game.load(newFen.fen);
 

@@ -1,5 +1,6 @@
 import {Square} from "chess.js";
 import { reactive, Ref } from "vue";
+import {FenInfo} from "./loadFens";
 
 export type State = {
   correct: number,
@@ -11,7 +12,7 @@ export type State = {
 }
 
 export type GameResult = {
-  fen: string,
+  fen: FenInfo,
   timeDisplayed: Date,
   solved: boolean,
 }
