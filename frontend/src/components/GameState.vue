@@ -3,7 +3,7 @@
     <v-col cols="5" v-if="state">
       <v-card height="100%">
           <v-scroll-y-transition hide-on-leave>
-            <v-card-title :key="state.correct" class="large-number text-center py-16 px-4">{{state.correct}}</v-card-title>
+            <v-card-title :key="state.correct" class="large-number foldit text-center py-16 px-4">{{state.correct}}</v-card-title>
           </v-scroll-y-transition>
         </v-card>
     </v-col>

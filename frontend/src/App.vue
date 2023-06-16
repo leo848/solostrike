@@ -14,3 +14,14 @@
 
   }
 </script>
+
+<style>
+@font-face {
+  font-family: "Foldit";
+  src: url("fonts/Foldit-VariableFont_wght.ttf");
+}
+
+.foldit {
+  font-family: Foldit;
+}
+</style>
