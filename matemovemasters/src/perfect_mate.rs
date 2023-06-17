@@ -14,7 +14,7 @@ pub fn perfect_mate(chess: &Chess) -> bool {
                 continue;
             }
         };
-        if !chess.is_checkmate() {
+        if chess.is_checkmate() {
             return false;
         }
         game = prev_game;
