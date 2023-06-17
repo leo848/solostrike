@@ -24,12 +24,24 @@
         </v-card>
       </v-scale-transition>
     </v-col>
+    <v-col cols="4" v-if="state && state.gameResults[0]">
+      <v-card>
+        <v-card-title class="large-number streak">
+          <span>
+            <v-icon size="60pt" class="power-icon" color="yellow-lighten-4">mdi-lightning-bolt</v-icon>
+          </span>
+          <span class="streak">
+            {{streakNumber}}
+          </span>
+        </v-card-title>
+      </v-card>
+    </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import {FenInfo, isFenInfo} from '@/game/loadFens';
-import {State, isState} from '@/game/state';
+import {State, isState, streak} from '@/game/state';
 
 export default {
   data: () => ({
@@ -86,6 +98,9 @@ export default {
     }
   },
   computed: {
+    streakNumber(): number {
+      return streak(this.state);
+    },
     puzzleMove(): string {
       const suffix = this.puzzle.color === "white" ? ". " : "... ";
       const lastMove = this.state.temp?.lastMove?.san ?? '';
@@ -101,5 +116,9 @@ export default {
 }
 .semilarge {
   font-size: 30pt;
+}
+.streak {
+  line-height: 90pt;
+  font-weight: 300;
 }
 </style>
