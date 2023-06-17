@@ -4,10 +4,11 @@ use std::{convert::identity, fs::OpenOptions, iter};
 
 use indicatif::{ProgressBar, ProgressStyle};
 use itertools::Itertools;
+use perfect_mate::perfect_mate;
 use shakmaty::{fen::Fen, Chess, EnPassantMode, MoveList, Outcome, Position, Role};
 
 fn one_game_end(chess: &Chess, moves: &MoveList, only_mate: bool) -> bool {
-    let mut game = chess.clone();
+    let mut game = chess.closinglone();
     moves
         .iter()
         .map(|move_| {
@@ -41,6 +42,7 @@ fn material_winning(chess: &Chess) -> bool {
 struct GameConfig {
     immediate_mode: bool,
     only_material_losing: bool,
+    only_perfect: bool,
 }
 
 fn random_game(config: GameConfig) -> Option<Fen> {
@@ -58,7 +60,9 @@ fn random_game(config: GameConfig) -> Option<Fen> {
 
         if config.immediate_mode {
             if one_game_end(&game, &legal_moves, true) {
-                if !(config.only_material_losing && material_winning(&game)) {
+                if !(config.only_material_losing && material_winning(&game))
+                    && !(config.only_perfect && !perfect_mate(&game))
+                {
                     return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)));
                 }
             }
@@ -93,7 +97,7 @@ fn main() {
     let file = OpenOptions::new()
         .create(true)
         .write(true)
-        .open("fens_losing.json")
+        .open("fens_perfect.json")
         .expect("failed to open file");
     let bar = ProgressBar::new(AMOUNT as u64);
 
@@ -107,7 +111,8 @@ fn main() {
     let output = iter::repeat_with(|| {
         random_game(GameConfig {
             immediate_mode: true,
-            only_material_losing: true,
+            only_material_losing: false,
+            only_perfect: true,
         })
     })
     .filter_map(identity)
