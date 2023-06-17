@@ -1,14 +1,8 @@
-use indicatif::ProgressBar;
-use indicatif::ProgressStyle;
-use itertools::Itertools;
-use shakmaty::EnPassantMode;
-use shakmaty::Role;
-use std::convert::identity;
-use std::fs::OpenOptions;
-use std::iter;
+use std::{convert::identity, fs::OpenOptions, iter};
 
-use shakmaty::fen::Fen;
-use shakmaty::{Chess, MoveList, Outcome, Position};
+use indicatif::{ProgressBar, ProgressStyle};
+use itertools::Itertools;
+use shakmaty::{fen::Fen, Chess, EnPassantMode, MoveList, Outcome, Position, Role};
 
 fn one_game_end(chess: &Chess, moves: &MoveList, only_mate: bool) -> bool {
     let mut game = chess.clone();
