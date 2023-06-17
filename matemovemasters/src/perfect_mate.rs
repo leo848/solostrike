@@ -1,4 +1,4 @@
-use shakmaty::{Chess, Position, FromSetup, EnPassantMode::Legal, CastlingMode::Standard};
+use shakmaty::{CastlingMode::Standard, Chess, EnPassantMode::Legal, FromSetup, Move, Position};
 
 pub fn perfect_mate(chess: &Chess) -> bool {
     let mut game = chess.board().clone();
@@ -24,4 +24,8 @@ pub fn perfect_mate(chess: &Chess) -> bool {
     }
 
     return true;
+}
+
+pub fn create_perfect_mate(chess: &Chess, move_: &Move) -> Chess {
+    todo!()
 }
