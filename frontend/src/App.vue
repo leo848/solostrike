@@ -18,7 +18,7 @@
 <style>
 @font-face {
   font-family: "Foldit";
-  src: url("fonts/Foldit-VariableFont_wght.ttf");
+  src: url("/fonts/Foldit-VariableFont_wght.ttf");
 }
 
 .foldit {
