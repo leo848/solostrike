@@ -36,7 +36,7 @@ export async function randomFen(): Promise<FenInfo> {
 }
 
 async function loadFens(): Promise<string[]> {
-  let resp = await fetch("fens/fens_l.json");
+  let resp = await fetch("fens/fens_e.json");
   let json = await resp.json();
   return json;
 }
