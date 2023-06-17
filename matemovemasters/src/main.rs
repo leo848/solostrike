@@ -1,3 +1,5 @@
+mod perfect_mate;
+
 use std::{convert::identity, fs::OpenOptions, iter};
 
 use indicatif::{ProgressBar, ProgressStyle};
