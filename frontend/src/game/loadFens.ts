@@ -36,7 +36,7 @@ export async function randomFen(): Promise<FenInfo> {
 }
 
 async function loadFens(): Promise<string[]> {
-  let resp = await fetch("fens/fens_perfect.json");
+  let resp = await fetch("fens/fens_created_perfect.json");
   let json = await resp.json();
   return json;
 }

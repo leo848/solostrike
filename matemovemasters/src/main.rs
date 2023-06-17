@@ -4,7 +4,7 @@ use std::{convert::identity, fs::OpenOptions, iter};
 
 use indicatif::{ProgressBar, ProgressStyle};
 use itertools::Itertools;
-use perfect_mate::perfect_mate;
+use perfect_mate::{create_perfect_mate, perfect_mate};
 use shakmaty::{fen::Fen, Chess, EnPassantMode, Move, MoveList, Outcome, Position, Role};
 
 fn one_game_end(chess: &Chess, moves: &MoveList, only_mate: bool) -> Option<Move> {
@@ -44,6 +44,7 @@ struct GameConfig {
     immediate_mode: bool,
     only_material_losing: bool,
     only_perfect: bool,
+    create_perfect: bool,
 }
 
 fn random_game(config: GameConfig) -> Option<Fen> {
@@ -68,6 +69,11 @@ fn random_game(config: GameConfig) -> Option<Fen> {
                         game.play_unchecked(&m);
                         game
                     }));
+                let game = if config.create_perfect {
+                    create_perfect_mate(&game, &m)
+                } else {
+                    game.clone()
+                };
                 if sat_material && sat_perfect {
                     return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)));
                 }
@@ -96,15 +102,15 @@ fn random_game(config: GameConfig) -> Option<Fen> {
     Some(Fen::from_setup(prev.into_setup(EnPassantMode::Legal)))
 }
 
-const AMOUNT: usize = 1_000; // 100_000;
-const MOD: usize = 4; // 128
+const AMOUNT: usize = 100_000; // 100_000;
+const MOD: usize = 32;
 
 fn main() {
     let file = OpenOptions::new()
         .create(true)
         .write(true)
         .truncate(true)
-        .open("fens_perfect.json")
+        .open("fens_created_perfect.json")
         .expect("failed to open file");
     let bar = ProgressBar::new(AMOUNT as u64);
 
@@ -119,7 +125,8 @@ fn main() {
         random_game(GameConfig {
             immediate_mode: true,
             only_material_losing: false,
-            only_perfect: true,
+            only_perfect: false,
+            create_perfect: true,
         })
     })
     .filter_map(identity)
