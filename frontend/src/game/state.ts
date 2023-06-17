@@ -20,8 +20,12 @@ export type GameResult = {
 
 export function streak(state: State): number {
   let counter = 0;
-  for (; state.gameResults[state.gameResults.length - counter - 1].attempts <= 1; counter++);
-  return counter;
+  while (counter <= state.gameResults.length) {
+    const result = state.gameResults[state.gameResults.length - counter - 1];
+    if (!result || result.attempts > Number(result.solved)) break;
+    else counter++;
+  }
+  return Math.max(0, counter - 1);
 }
 
 export type Timer = Ref<{
