@@ -11,3 +11,6 @@ indicatif = "0.17.5"
 itertools = "0.10.5"
 serde_json = "1.0.96"
 shakmaty = "0.25.0"
+
+[profile.release]
+lto = "fat"

@@ -21,7 +21,7 @@ export async function randomFen(): Promise<FenInfo> {
   if (fens == null) {
     fens = await loadFens();
   }
-  assert(fens.length == 100000, `Length is not 100000, but ${fens.length}`);
+  assert(fens.length == 100000 || fens.length == 1000, `Length is not 100000 or 1000, but ${fens.length}`);
   const index = Math.floor(Math.random() * fens.length);
   const fen = fens[index];
   const components = fen.split(" ");

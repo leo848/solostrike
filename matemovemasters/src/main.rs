@@ -5,9 +5,9 @@ use std::{convert::identity, fs::OpenOptions, iter};
 use indicatif::{ProgressBar, ProgressStyle};
 use itertools::Itertools;
 use perfect_mate::perfect_mate;
-use shakmaty::{fen::Fen, Chess, EnPassantMode, MoveList, Outcome, Position, Role};
+use shakmaty::{fen::Fen, Chess, EnPassantMode, MoveList, Outcome, Position, Role, Move};
 
-fn one_game_end(chess: &Chess, moves: &MoveList, only_mate: bool) -> bool {
+fn one_game_end(chess: &Chess, moves: &MoveList, only_mate: bool) -> Option<Move> {
     let mut game = chess.clone();
     moves
         .iter()
@@ -19,12 +19,13 @@ fn one_game_end(chess: &Chess, moves: &MoveList, only_mate: bool) -> bool {
                 game.is_game_over()
             };
             game = chess.clone();
-            game_over
+            (move_, game_over)
         })
-        .filter(|&b| b)
-        .take(2)
-        .count()
-        == 1
+        .filter(|(_m, b)| *b)
+        .map(|(m, _b)| m)
+        .exactly_one()
+        .ok()
+        .cloned()
 }
 
 fn material_winning(chess: &Chess) -> bool {
@@ -59,9 +60,14 @@ fn random_game(config: GameConfig) -> Option<Fen> {
         let random_idx = fastrand::usize(..legal_moves.len());
 
         if config.immediate_mode {
-            if one_game_end(&game, &legal_moves, true) {
-                if !(config.only_material_losing && material_winning(&game))
-                    && !(config.only_perfect && !perfect_mate(&game))
+            if let Some(m) = one_game_end(&game, &legal_moves, true) {
+                let sat_material = !(config.only_material_losing && material_winning(&game));
+                let sat_perfect = !(config.only_perfect && !perfect_mate(&{
+                    let mut game = game.clone();
+                    game.play_unchecked(&m);
+                    game
+                }));
+                if sat_material && sat_perfect
                 {
                     return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)));
                 }
@@ -83,15 +89,15 @@ fn random_game(config: GameConfig) -> Option<Fen> {
         return None;
     };
 
-    if !one_game_end(&prev, &legal_moves, false) {
+    if one_game_end(&prev, &legal_moves, false).is_none() {
         return None;
     }
 
     Some(Fen::from_setup(prev.into_setup(EnPassantMode::Legal)))
 }
 
-const AMOUNT: usize = 100_000;
-const MOD: usize = 128;
+const AMOUNT: usize = 1_000; // 100_000;
+const MOD: usize = 4; // 128
 
 fn main() {
     let file = OpenOptions::new()
