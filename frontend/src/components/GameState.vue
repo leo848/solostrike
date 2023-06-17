@@ -26,7 +26,7 @@
     </v-col>
     <v-col cols="4" v-if="state && state.gameResults[0]">
       <v-card>
-        <v-card-title class="large-number streak">
+        <v-card-title class="mid-number streak">
           <span>
             <v-icon size="60pt" class="power-icon" color="yellow-lighten-4">mdi-lightning-bolt</v-icon>
           </span>
@@ -114,11 +114,14 @@ export default {
 .large-number {
   font-size: 90pt;
 }
+.mid-number {
+  font-size: 60pt;
+}
 .semilarge {
   font-size: 30pt;
 }
 .streak {
-  line-height: 90pt;
-  font-weight: 300;
+  line-height: 70pt;
+  font-weight: 400;
 }
 </style>
