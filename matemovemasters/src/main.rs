@@ -8,7 +8,7 @@ use perfect_mate::perfect_mate;
 use shakmaty::{fen::Fen, Chess, EnPassantMode, MoveList, Outcome, Position, Role};
 
 fn one_game_end(chess: &Chess, moves: &MoveList, only_mate: bool) -> bool {
-    let mut game = chess.closinglone();
+    let mut game = chess.clone();
     moves
         .iter()
         .map(|move_| {
