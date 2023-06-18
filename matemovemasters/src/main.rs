@@ -45,6 +45,7 @@ struct GameConfig {
     only_material_losing: bool,
     only_perfect: bool,
     create_perfect: bool,
+    minimum_pieces: usize,
 }
 
 fn random_game(config: GameConfig) -> Option<Fen> {
@@ -62,8 +63,8 @@ fn random_game(config: GameConfig) -> Option<Fen> {
 
         if config.immediate_mode {
             if let Some(m) = one_game_end(&game, &legal_moves, true) {
-                let sat_material = !(config.only_material_losing && material_winning(&game));
-                let sat_perfect = !(config.only_perfect
+                let sat_material = || !(config.only_material_losing && material_winning(&game));
+                let sat_perfect =  || !(config.only_perfect
                     && !perfect_mate(&{
                         let mut game = game.clone();
                         game.play_unchecked(&m);
@@ -74,7 +75,8 @@ fn random_game(config: GameConfig) -> Option<Fen> {
                 } else {
                     game.clone()
                 };
-                if sat_material && sat_perfect {
+                let sat_minimum = || game.board().occupied().count() >= config.minimum_pieces;
+                if sat_minimum() && sat_material() && sat_perfect() {
                     return Some(Fen::from_setup(game.into_setup(EnPassantMode::Legal)));
                 }
             }
@@ -103,14 +105,14 @@ fn random_game(config: GameConfig) -> Option<Fen> {
 }
 
 const AMOUNT: usize = 100_000; // 100_000;
-const MOD: usize = 32;
+const MOD: usize = 4;// 32;
 
 fn main() {
     let file = OpenOptions::new()
         .create(true)
         .write(true)
         .truncate(true)
-        .open("fens_created_perfect.json")
+        .open("fens_created_perfect_count.json")
         .expect("failed to open file");
     let bar = ProgressBar::new(AMOUNT as u64);
 
@@ -127,6 +129,7 @@ fn main() {
             only_material_losing: false,
             only_perfect: false,
             create_perfect: true,
+            minimum_pieces: 11,
         })
     })
     .filter_map(identity)
