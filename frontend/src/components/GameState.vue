@@ -36,6 +36,16 @@
         </v-card-title>
       </v-card>
     </v-col>
+    <v-col cols="4">
+      <v-card height="100%">
+        <v-slide-x-reverse-transition hide-on-leave>
+          <v-card-title :key="Number(skipMillisLeft != 0)">
+            <v-progress-linear v-if="skipMillisLeft != 0" class="rounded-xl" v-model="skipMillisLeft" max="5000" height="100%" @click="skip(false)"></v-progress-linear>
+            <v-btn v-else block flat size="x-large" class="skip-btn rounded-xl py-12 my-0" @click="skip(true)">skip</v-btn>
+          </v-card-title>
+        </v-slide-x-reverse-transition>
+      </v-card>
+    </v-col>
   </v-row>
 </template>
 
@@ -46,6 +56,8 @@ import {State, isState, streak} from '@/game/state';
 export default {
   data: () => ({
     color: undefined as undefined | string,
+    skipInterval: null as null | NodeJS.Timeout,
+    skipMillisLeft: 0,
   }),
   props: {
     state: {
@@ -63,7 +75,27 @@ export default {
       type: Object as () => FenInfo,
     }
   },
+  emits: [ 'skip' ],
   methods: {
+    skip(start: boolean) {
+      if (!start) {
+        clearInterval(this.skipMillisLeft);
+        this.skipMillisLeft = 0;
+        return;
+      }
+      const timeout = 5000;
+      const frame = 100;
+      this.skipMillisLeft = timeout;
+      this.skipInterval = setInterval(() => {
+        if (this.skipMillisLeft! > 0) {
+          this.skipMillisLeft! -= frame;
+        } else {
+          clearInterval(this.skipInterval!);
+          this.skipMillisLeft = 0;
+          this.$emit('skip');
+        }
+      }, frame)
+    },
     input(result: "right" | "wrong") {
       const ev = new Event("mousedown") as MouseEventInit;
       const puzzleElt = this.$refs.puzzleCard as any;
@@ -119,6 +151,9 @@ export default {
 }
 .semilarge {
   font-size: 30pt;
+}
+.skip-btn {
+  font-size: 40pt;
 }
 .streak {
   line-height: 70pt;
