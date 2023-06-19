@@ -21,8 +21,10 @@ export type GameResult = {
 export function streak(state: State): number {
   let counter = 0;
   while (counter <= state.gameResults.length) {
-    const result = state.gameResults[state.gameResults.length - counter - 1];
-    if (!result || result.attempts > Number(result.solved)) break;
+    const result = state.gameResults[state.gameResults.length - counter - 2];
+    if (!result) break;
+    const valid = result.attempts == 1 && result.solved;
+    if (!valid) break;
     else counter++;
   }
   return Math.max(0, counter - 1);
