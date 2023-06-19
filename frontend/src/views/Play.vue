@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="12" md="6">
         <Timer @timeUp="timeUp" v-if="timer" :timer="timer" class="mt-8"></Timer>
-        <GameState v-if="state && fenInfo" :state="state" :puzzle="fenInfo" class="mt-4"></GameState>
+        <GameState @skip="skip" v-if="state && fenInfo" :state="state" :puzzle="fenInfo" class="mt-4"></GameState>
       </v-col>
     </v-row>
   </div>
@@ -114,6 +114,9 @@ export default {
     this.nextFen();
   },
   methods: {
+    skip() {
+      this.nextFen();
+    },
     lastGameResult(): GameResult {
       return this.state.gameResults[this.state.gameResults.length - 1];
     },
